@@ -92,7 +92,7 @@ export function ConnectAccount() {
                 <CardFooter>
                     <div className="flex flex-col items-start justify-center gap-2 w-full">
                         <Button type={'submit'} className="w-full">Connect</Button>
-                        <span className={`text-sm text-muted-foreground`}>Don't have an account? <Link href={'/register'} className={'text-primary underline'}>Register</Link></span>
+                        <span className={`text-sm text-muted-foreground`}>Don&apos;t have an account? <Link href={'/register'} className={'text-primary underline'}>Register</Link></span>
                     </div>
                 </CardFooter>
             </Card>

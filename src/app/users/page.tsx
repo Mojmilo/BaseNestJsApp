@@ -19,6 +19,7 @@ export default function Users() {
             name: e.currentTarget[0].value,
             email: e.currentTarget[1].value,
             password: e.currentTarget[2].value,
+            confirm_password: e.currentTarget[3].value,
         }
 
         const newUser = addUser(user);
