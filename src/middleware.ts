@@ -6,27 +6,26 @@ export async function middleware(req: NextRequest) {
 
     const verifiedToken = token &&
         (await verifyToken(token).catch((err) => {
-
             console.error(err.message);
         }));
 
-    if ((req.nextUrl.pathname.startsWith('/login') || req.nextUrl.pathname.startsWith('/register')) && !verifiedToken) {
+    if (req.nextUrl.pathname.startsWith('/auth') && !verifiedToken) {
         return NextResponse.next();
     }
 
     const url = req.url;
 
-    if ((url.includes('/login') || url.includes('/register')) && verifiedToken) {
+    if (url.includes('/auth') && verifiedToken) {
         return NextResponse.redirect(new URL('/dashboard', req.url));
     }
 
     if (!verifiedToken) {
-        return NextResponse.redirect(new URL('/login', req.url));
+        return NextResponse.redirect(new URL('/auth/login', req.url));
     }
 
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/dashboard', '/login', '/register']
+    matcher: ['/dashboard', '/auth/:path*'],
 }

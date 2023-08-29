@@ -12,35 +12,29 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {useEffect, useState} from "react";
-import {login} from "@/lib/auth";
+import {useEffect, useState, useTransition} from "react";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
-
-type LoginData = {
-    email: string;
-    password: string;
-}
+import {login} from "@/lib/auth";
+import {LoginDataType} from "@/types/auth";
 
 export function ConnectAccount() {
-    const [data, setData] = useState<LoginData>({
+    const [isPending, startTransition] = useTransition()
+
+    const [data, setData] = useState<LoginDataType>({
         email: '',
         password: ''
     });
 
     const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        try {
-            const user = await login(data);
-            if (user) {
-                window.location.reload();
+    const action = (formData: FormData) => {
+        startTransition(async () => {
+            try {
+                await login(data);
+            } catch (error: any) {
+                setError(error.message);
             }
-        } catch (error: any) {
-            setError(error.error);
-        }
+        });
     }
 
     useEffect(() => {
@@ -50,7 +44,7 @@ export function ConnectAccount() {
     }, [data])
 
     return (
-        <form onSubmit={handleSubmit} className={'w-1/3'}>
+        <form action={action} className={'w-1/3'}>
             <Card>
                 <CardHeader className="space-y-1">
                     <CardTitle className="text-2xl">Connect your account</CardTitle>
@@ -91,8 +85,13 @@ export function ConnectAccount() {
                 </CardContent>
                 <CardFooter>
                     <div className="flex flex-col items-start justify-center gap-2 w-full">
-                        <Button type={'submit'} className="w-full">Connect</Button>
-                        <span className={`text-sm text-muted-foreground`}>Don&apos;t have an account? <Link href={'/register'} className={'text-primary underline'}>Register</Link></span>
+                        <Button disabled={isPending} className="w-full">
+                            {isPending && (
+                                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                            )}{" "}
+                            Connect
+                        </Button>
+                        <span className={`text-sm text-muted-foreground`}>Don&apos;t have an account? <Link href={'/auth/register'} className={'text-primary underline'}>Register</Link></span>
                     </div>
                 </CardFooter>
             </Card>

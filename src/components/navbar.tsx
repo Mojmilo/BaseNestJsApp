@@ -32,17 +32,6 @@ export default function Navbar() {
     const { setTheme } = useTheme();
     const {user, setUser} = useSessionContext();
 
-    const handleLogout = async () => {
-        try {
-            const data = await logout();
-            if (data) {
-                window.location.reload();
-            }
-        } catch (error: any) {
-            console.log(error);
-        }
-    }
-
     return (
         <div className={'fixed top-0 left-0 flex flex-row justify-between items-center w-full z-40 border-b px-20 py-2'}>
             <div className="flex flex-row justify-center items-center gap-5">
@@ -161,7 +150,7 @@ export default function Navbar() {
                             <span>API</span>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={handleLogout}>
+                        <DropdownMenuItem onClick={() => logout()}>
                             <LogOut className="mr-2 h-4 w-4" />
                             <span>Log out</span>
                             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

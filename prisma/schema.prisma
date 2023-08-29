@@ -12,10 +12,35 @@ datasource db {
 }
 
 model User {
+  id         Int          @id @default(autoincrement())
+  email      String       @unique
+  name       String?
+  password   String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  TeamMember TeamMember[]
+}
+
+model Team {
+  id         Int          @id @default(autoincrement())
+  name       String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  TeamMember TeamMember[]
+}
+
+enum Role {
+  OWNER
+  MEMBER
+}
+
+model TeamMember {
   id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  password  String
+  teamId    Int
+  userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  team      Team     @relation(fields: [teamId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  role      Role     @default(MEMBER)
 }

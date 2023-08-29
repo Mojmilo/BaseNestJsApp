@@ -2,7 +2,6 @@
 
 import {createContext, Dispatch, SetStateAction, useContext, useEffect, useState} from "react";
 import {User} from "@prisma/client";
-import {me} from "@/lib/auth";
 
 interface ContextProps {
     user: User | null;
@@ -14,14 +13,12 @@ export const SessionContext = createContext<ContextProps>({
     setUser: (): User => ({} as User)
 });
 
-export const SessionContextProvider = ({children}: { children: React.ReactNode }) => {
+export const SessionContextProvider = ({children, userSession}: { children: React.ReactNode, userSession: User | null }) => {
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
-        me().then((user) => {
-            setUser(user);
-        });
-    }, []);
+        setUser(userSession);
+    }, [userSession]);
 
     return (
         <SessionContext.Provider value={{user, setUser}}>

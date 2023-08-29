@@ -12,39 +12,32 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {useEffect, useState} from "react";
-import {register} from "@/lib/auth";
+import {useEffect, useState, useTransition} from "react";
+import {login, register} from "@/lib/auth";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
-
-type LoginData = {
-    name: string;
-    email: string;
-    password: string;
-    confirm_password: string;
-}
+import {RegisterDataType} from "@/types/auth";
 
 export function CreateAccount() {
-    const [data, setData] = useState<LoginData>({
+    const [isPending, startTransition] = useTransition()
+
+    const [data, setData] = useState<RegisterDataType>({
         name: '',
         email: '',
         password: '',
         confirm_password: ''
     });
+    const [levelPassword, setLevelPassword] = useState<number>(0);
 
     const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        try {
-            const user = await register(data);
-            if (user) {
-                window.location.reload();
+    const action = (formData: FormData) => {
+        startTransition(async () => {
+            try {
+                await register(data);
+            } catch (error: any) {
+                setError(error.message);
             }
-        } catch (error: any) {
-            setError(error.error);
-        }
+        });
     }
 
     useEffect(() => {
@@ -53,8 +46,24 @@ export function CreateAccount() {
         }
     }, [data])
 
+    useEffect(() => {
+        setLevelPassword(0);
+
+        if (data.password.match(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])/)) {
+            setLevelPassword(1);
+        }
+
+        if (data.password.match(/((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[a-zA-Z\d@$!%*?&]{8,})/)) {
+            setLevelPassword(2);
+        }
+
+        if (data.password.match(/((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[a-zA-Z\d@$!%*?&]{12,})/)) {
+            setLevelPassword(3);
+        }
+    }, [data.password])
+
     return (
-        <form onSubmit={handleSubmit} className={'w-1/3'}>
+        <form action={action} className={'w-1/3'}>
             <Card>
                 <CardHeader className="space-y-1">
                     <CardTitle className="text-2xl">Create an account</CardTitle>
@@ -95,6 +104,31 @@ export function CreateAccount() {
                     <div className="grid gap-2">
                         <Label htmlFor="password">Password</Label>
                         <Input id="password" type="password" value={data.password} onChange={e => setData({...data, password: e.target.value})} />
+                        <div className="flex flex-row justify-start items-center gap-5">
+                            <div className="flex flex-row justify-start items-center gap-2">
+                                <div className={`relative w-16 h-1 rounded-full bg-muted overflow-hidden`}>
+                                    <div className={`absolute h-1 inset-0 rounded-full bg-red-500 ${levelPassword > 0 ? 'translate-x-0' : '-translate-x-full'} transition-all duration-150`}></div>
+                                </div>
+                                <div className={`relative w-16 h-1 rounded-full bg-muted overflow-hidden`}>
+                                    <div className={`absolute h-1 inset-0 rounded-full bg-yellow-500 ${levelPassword > 1 ? 'translate-x-0' : '-translate-x-full'} transition-all duration-150`}></div>
+                                </div>
+                                <div className={`relative w-16 h-1 rounded-full bg-muted overflow-hidden`}>
+                                    <div className={`absolute h-1 inset-0 rounded-full bg-cyan-500 ${levelPassword > 2 ? 'translate-x-0' : '-translate-x-full'} transition-all duration-150`}></div>
+                                </div>
+                            </div>
+                            <span className={`
+                                text-sm
+                                ${levelPassword === 0 && 'text-muted-foreground'}
+                                ${levelPassword === 1 && 'text-red-500'}
+                                ${levelPassword === 2 && 'text-yellow-500'}
+                                ${levelPassword === 3 && 'text-cyan-500'}
+                            `}>
+                                {levelPassword === 0 && 'Weak'}
+                                {levelPassword === 1 && 'Too weak'}
+                                {levelPassword === 2 && 'Could be stronger'}
+                                {levelPassword === 3 && 'Strong password'}
+                            </span>
+                        </div>
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="confirm_password">Confirm password</Label>
@@ -103,8 +137,13 @@ export function CreateAccount() {
                 </CardContent>
                 <CardFooter>
                     <div className="flex flex-col items-start justify-center gap-2 w-full">
-                        <Button type={'submit'} className="w-full">Connect</Button>
-                        <span className={`text-sm text-muted-foreground`}>Already have an account? <Link href={'/login'} className={'text-primary underline'}>Login</Link></span>
+                        <Button disabled={isPending} className="w-full">
+                            {isPending && (
+                                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                            )}{" "}
+                            Create account
+                        </Button>
+                        <span className={`text-sm text-muted-foreground`}>Already have an account? <Link href={'/auth/login'} className={'text-primary underline'}>Login</Link></span>
                     </div>
                 </CardFooter>
             </Card>
