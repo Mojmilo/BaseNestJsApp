@@ -21,3 +21,34 @@ export const getUser = async () => {
         }
     });
 }
+
+export const createTeam = async (name: string) => {
+    // verify if name is not empty
+    if (!name) {
+        throw new Error('Missing name');
+    }
+
+    return prisma.team.create({
+        data: {
+            name: name,
+            TeamMember: {
+                create: {
+                    role: 'OWNER',
+                    userId: getUserId()
+                }
+            }
+        }
+    });
+}
+
+export const getTeams = async () => {
+    return prisma.team.findMany({
+        where: {
+            TeamMember: {
+                some: {
+                    userId: getUserId()
+                }
+            }
+        }
+    });
+}

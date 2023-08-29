@@ -9,3 +9,7 @@ export type RegisterDataType = {
     password: string;
     confirm_password: string;
 }
+
+export type TeamDataType = {
+    name: string;
+}
