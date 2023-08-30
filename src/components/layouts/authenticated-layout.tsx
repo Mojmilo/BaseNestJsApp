@@ -1,9 +1,9 @@
 import {AuthProvider} from "@/components/providers/auth-provider";
-import {LayoutDataType} from "@/types";
+import {AuthenticatedLayoutDataType} from "@/types";
 import {getUser} from "@/lib/user";
 
 export default async function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
-    const data: LayoutDataType = {
+    const data: AuthenticatedLayoutDataType = {
         user: await getUser()
     };
 

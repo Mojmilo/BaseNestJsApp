@@ -1,10 +1,10 @@
 import {Team, User} from "@prisma/client";
 
-export type LayoutDataType = {
+export type AuthenticatedLayoutDataType = {
     user: User | null;
 }
 
-export type DashboardDataType = {
+export type DashboardLayoutDataType = {
     teams: Team[];
     selectedTeam: Team;
 }

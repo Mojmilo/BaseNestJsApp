@@ -4,11 +4,11 @@ import {useEffect, useState} from "react";
 import {Team} from "@prisma/client";
 import {getTeams} from "@/lib/user";
 import {DashboardContext} from "@/context/dashboard-context";
-import {DashboardDataType} from "@/types";
+import {DashboardLayoutDataType} from "@/types";
 
 type DashboardProviderProps = {
     children: React.ReactNode;
-    data: DashboardDataType;
+    data: DashboardLayoutDataType;
 }
 
 export const DashboardProvider = ({children, data}: DashboardProviderProps) => {
