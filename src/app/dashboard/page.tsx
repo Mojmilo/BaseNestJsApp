@@ -1,9 +1,13 @@
-import Navbar from "@/components/navbar";
+import DashboardLayout from "@/components/layouts/dashboard-layout";
+import TestComponent from "@/components/test-component";
+import AuthenticatedLayout from "@/components/layouts/authenticated-layout";
 
 export default function Dashboard() {
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <Navbar />
-        </main>
+        <AuthenticatedLayout>
+            <DashboardLayout>
+                <TestComponent />
+            </DashboardLayout>
+        </AuthenticatedLayout>
     )
 }
