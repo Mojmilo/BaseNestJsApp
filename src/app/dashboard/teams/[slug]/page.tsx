@@ -21,10 +21,20 @@ export default async function Team({params: {slug}}: {params: Props}) {
         <AuthenticatedLayout>
             <TeamProvider data={data}>
                 <DashboardLayout>
-                    <div className={'flex flex-col items-center justify-center w-full'}>
+                    <div className={'flex flex-col items-center justify-start w-full h-full gap-10'}>
                         <div className={'flex flex-col items-start justify-center w-full gap-5'}>
                             <h2 className={'text-4xl font-semibold'}>{data.team.name}</h2>
                             <span className={'text-sm font-extralight'}>Comment on this team</span>
+                        </div>
+
+                        <div className={'flex flex-flex justify-start items-center w-full h-full gap-10'}>
+                            <div className={'flex flex-col items-center justify-center w-96 h-full bg-muted'}>
+                                Folders
+                            </div>
+
+                            <div className={'flex flex-col items-center justify-center w-full h-full bg-muted'}>
+                                Tasks
+                            </div>
                         </div>
                     </div>
                 </DashboardLayout>
