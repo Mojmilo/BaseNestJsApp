@@ -65,7 +65,7 @@ export default function NewTeamDialog({showNewTeamDialog, setShowNewTeamDialog}:
                         <Button type={'button'} variant="outline" onClick={() => setShowNewTeamDialog(false)}>
                             Cancel
                         </Button>
-                        <Button type="submit">
+                        <Button type="submit" disabled={isPending}>
                             {isPending && (
                                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                             )}{" "}

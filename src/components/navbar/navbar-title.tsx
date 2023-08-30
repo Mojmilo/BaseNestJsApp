@@ -1,13 +1,6 @@
-import {getVersion} from "@/lib";
-import {useEffect, useState} from "react";
+import {version} from '../../../package.json'
 
 export default function NavbarTitle() {
-    const [version, setVersion] = useState<string>('');
-
-    useEffect(() => {
-        setVersion(getVersion());
-    }, [])
-
     return (
         <div className={'flex flex-col items-center justify-center'}>
             <span>
