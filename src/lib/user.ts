@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import {cookies} from "next/headers";
 import {decodeJwt} from "jose";
 
-const getUserId = () => {
+export const getUserId = () => {
     const token = cookies().get('user-token')?.value;
     const payload = token ? decodeJwt(token) : null;
     if (payload) {
@@ -34,18 +34,6 @@ export const createTeam = async (name: string) => {
             TeamMember: {
                 create: {
                     role: 'OWNER',
-                    userId: getUserId()
-                }
-            }
-        }
-    });
-}
-
-export const getTeams = async () => {
-    return prisma.team.findMany({
-        where: {
-            TeamMember: {
-                some: {
                     userId: getUserId()
                 }
             }

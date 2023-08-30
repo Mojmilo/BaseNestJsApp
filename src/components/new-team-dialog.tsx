@@ -15,9 +15,10 @@ import {useState, useTransition} from "react";
 import {TeamDataType} from "@/types/auth";
 import {createTeam} from "@/lib/user";
 import {useDashboardContext} from "@/context/dashboard-context";
+import {useRouter} from "next/navigation";
 
 export default function NewTeamDialog({showNewTeamDialog, setShowNewTeamDialog}: {showNewTeamDialog: boolean, setShowNewTeamDialog: (value: boolean) => void}) {
-    const {teams, setTeams, selectedTeam, setSelectedTeam} = useDashboardContext();
+    const {teams, setTeams} = useDashboardContext();
 
     const [isPending, startTransition] = useTransition()
 
@@ -26,6 +27,8 @@ export default function NewTeamDialog({showNewTeamDialog, setShowNewTeamDialog}:
     });
 
     const [error, setError] = useState<string | null>(null);
+
+    const router = useRouter();
 
     const action = (formData: FormData) => {
         startTransition(async () => {
@@ -36,7 +39,7 @@ export default function NewTeamDialog({showNewTeamDialog, setShowNewTeamDialog}:
                 })
                 setShowNewTeamDialog(false);
                 setTeams([...teams, team]);
-                setSelectedTeam(team)
+                router.push(`/dashboard/teams/${team.id}`);
             } catch (error: any) {
                 setError(error.message);
             }

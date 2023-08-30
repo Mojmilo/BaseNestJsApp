@@ -6,5 +6,8 @@ export type AuthenticatedLayoutDataType = {
 
 export type DashboardLayoutDataType = {
     teams: Team[];
-    selectedTeam: Team;
+}
+
+export type TeamDataType = {
+    team: Team | null;
 }

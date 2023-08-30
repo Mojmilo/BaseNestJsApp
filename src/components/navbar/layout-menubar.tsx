@@ -31,12 +31,12 @@ export default function LayoutMenubar({ className }: LayoutMenubarProps) {
                 <MenubarTrigger>File</MenubarTrigger>
                 <MenubarContent>
                     <MenubarItem>
-                        New Tab <MenubarShortcut>⌘T</MenubarShortcut>
+                        New Task <MenubarShortcut>⌘T</MenubarShortcut>
                     </MenubarItem>
                     <MenubarItem>
-                        New Window <MenubarShortcut>⌘N</MenubarShortcut>
+                        New Folder <MenubarShortcut>⌘N</MenubarShortcut>
                     </MenubarItem>
-                    <MenubarItem disabled>New Incognito Window</MenubarItem>
+                    <MenubarItem disabled>New Incognito Folder</MenubarItem>
                     <MenubarSeparator />
                     <MenubarSub>
                         <MenubarSubTrigger>Share</MenubarSubTrigger>

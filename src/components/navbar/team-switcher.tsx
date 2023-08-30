@@ -30,21 +30,37 @@ import {
 } from "@/components/ui/popover"
 import {useDashboardContext} from "@/context/dashboard-context";
 import NewTeamDialog from "@/components/new-team-dialog";
+import {useRouter} from "next/navigation";
+import {useTeamContext} from "@/context/team-context";
+import {useTransition} from "react";
+import {Team} from "@prisma/client";
+import {Icons} from "@/components/icons";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
 interface TeamSwitcherProps extends PopoverTriggerProps {}
 
 export default function TeamSwitcher({ className }: TeamSwitcherProps) {
-    const {teams, setTeams, selectedTeam, setSelectedTeam} = useDashboardContext();
+    const {teams, setTeams} = useDashboardContext();
+    const {team, setTeam} = useTeamContext();
     const [open, setOpen] = React.useState(false)
     const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false)
+    const router = useRouter()
+    const [isPending, startTransition] = useTransition()
+    const [selectedTeam, setSelectedTeam] = React.useState<Team | null>(null)
+
+    const action = (team: Team) => {
+        setSelectedTeam(team)
+        startTransition(async () => {
+            router.push(`/dashboard/teams/${team.id}`)
+        });
+    }
 
     return (
         <>
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
-                    {selectedTeam ? (
+                    {team ? (
                         <Button
                             variant="outline"
                             role="combobox"
@@ -54,12 +70,12 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
                         >
                             <Avatar className="mr-2 h-5 w-5">
                                 <AvatarImage
-                                    src={`https://avatar.vercel.sh/${selectedTeam.name}.png`}
-                                    alt={selectedTeam.name}
+                                    src={`https://avatar.vercel.sh/${team.name}.png`}
+                                    alt={team.name}
                                 />
-                                <AvatarFallback>{selectedTeam.name?.charAt(0).toUpperCase()}</AvatarFallback>
+                                <AvatarFallback>{team.name?.charAt(0).toUpperCase()}</AvatarFallback>
                             </Avatar>
-                            {selectedTeam.name}
+                            {team.name}
                             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                     ) : (
@@ -70,8 +86,7 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
                             aria-label="Select a team"
                             className={cn("w-[200px] justify-between", className)}
                         >
-                            <PlusCircledIcon className="mr-2 h-5 w-5" />
-                            Create Team
+                            <span className="mr-2">Select a team</span>
                             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                     )}
@@ -81,33 +96,34 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
                         <CommandList>
                             <CommandInput placeholder="Search team..." />
                             <CommandGroup heading={'Teams'}>
-                                {teams.map((team) => (
+                                {teams.map((t) => (
                                     <CommandItem
-                                        key={team.id}
-                                        onSelect={() => {
-                                            setSelectedTeam(team)
-                                            setOpen(false)
-                                        }}
+                                        key={t.id}
+                                        onSelect={() => action(t)}
                                         className="text-sm"
                                     >
                                         <Avatar className="mr-2 h-5 w-5">
                                             <AvatarImage
-                                                src={`https://avatar.vercel.sh/${team.name}.png`}
-                                                alt={team.name}
+                                                src={`https://avatar.vercel.sh/${t.name}.png`}
+                                                alt={t.name}
                                                 className="grayscale"
                                             />
-                                            <AvatarFallback>{team.name?.charAt(0).toUpperCase()}</AvatarFallback>
+                                            <AvatarFallback>{t.name?.charAt(0).toUpperCase()}</AvatarFallback>
                                         </Avatar>
-                                        {team.name}
-                                        {selectedTeam && (
-                                            <CheckIcon
-                                                className={cn(
-                                                    "ml-auto h-4 w-4",
-                                                    selectedTeam.id === team.id
-                                                        ? "opacity-100"
-                                                        : "opacity-0"
-                                                )}
-                                            />
+                                        {t.name}
+                                        {isPending ? selectedTeam?.id === t.id && (
+                                            <Icons.spinner className="ml-auto h-4 w-4 animate-spin" />
+                                        ) : (
+                                            team && (
+                                                <CheckIcon
+                                                    className={cn(
+                                                        "ml-auto h-4 w-4",
+                                                        team.id === t.id
+                                                            ? "opacity-100"
+                                                            : "opacity-0"
+                                                    )}
+                                                />
+                                            )
                                         )}
                                     </CommandItem>
                                 ))}
