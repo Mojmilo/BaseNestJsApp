@@ -11,8 +11,9 @@ export default function FoldersComponent() {
             {
                 folders.length > 0 ? (
                     <div className={'flex flex-col items-center justify-start w-full h-full gap-2 p-2'}>
-                        {folders.map((folder) => (
+                        {folders.map((folder, index) => (
                             <Button
+                                key={index}
                                 variant={folder === selectedFolder ? 'default' : 'link'}
                                 onClick={() => setSelectedFolder(folder)}
                                 className={'flex flex-row items-center justify-center w-full h-10 px-5 gap-5'}
