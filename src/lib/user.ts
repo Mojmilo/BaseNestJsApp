@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import {cookies} from "next/headers";
 import {decodeJwt} from "jose";
+import {Team} from "@prisma/client";
 
 export const getUserId = () => {
     const token = cookies().get('user-token')?.value;

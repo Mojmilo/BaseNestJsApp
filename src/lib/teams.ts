@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import {getUserId} from "@/lib/user";
+import {Team} from "@prisma/client";
 
 export const getTeams = async () => {
     return prisma.team.findMany({
@@ -19,6 +20,19 @@ export const getTeam = async (id: number) => {
     return prisma.team.findUnique({
         where: {
             id: id
+        }
+    });
+}
+
+export const deleteTeam = async (team: Team) => {
+    // verify if team is not empty
+    if (!team) {
+        throw new Error('Missing name');
+    }
+
+    return prisma.team.delete({
+        where: {
+            id: team.id
         }
     });
 }

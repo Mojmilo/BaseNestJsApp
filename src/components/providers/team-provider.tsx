@@ -12,9 +12,12 @@ type TeamProviderProps = {
 
 export const TeamProvider = ({children, data}: TeamProviderProps) => {
     const [team, setTeam] = useState<Team | null>(data.team);
+    const [folders, setFolders] = useState<any[]>([]);
+    const [selectedFolder, setSelectedFolder] = useState<any>(null);
+    const [tasks, setTasks] = useState<any[]>([]);
 
     return (
-        <TeamContext.Provider value={{team, setTeam}}>
+        <TeamContext.Provider value={{team, setTeam, folders, setFolders, selectedFolder, setSelectedFolder, tasks, setTasks}}>
             {children}
         </TeamContext.Provider>
     );

@@ -4,6 +4,9 @@ import {getTeam} from "@/lib/teams";
 import {redirect} from "next/navigation";
 import {TeamProvider} from "@/components/providers/team-provider";
 import {TeamDataType} from "@/types";
+import FoldersComponent from "@/components/folders-component";
+import TasksComponent from "@/components/tasks-component";
+import TeamComponent from "@/components/team-component";
 
 type Props = {
     slug: string
@@ -22,19 +25,11 @@ export default async function Team({params: {slug}}: {params: Props}) {
             <TeamProvider data={data}>
                 <DashboardLayout>
                     <div className={'flex flex-col items-center justify-start w-full h-full gap-10'}>
-                        <div className={'flex flex-col items-start justify-center w-full gap-5'}>
-                            <h2 className={'text-4xl font-semibold'}>{data.team.name}</h2>
-                            <span className={'text-sm font-extralight'}>Comment on this team</span>
-                        </div>
+                        <TeamComponent />
 
                         <div className={'flex flex-flex justify-start items-center w-full h-full gap-10'}>
-                            <div className={'flex flex-col items-center justify-center w-96 h-full bg-muted'}>
-                                Folders
-                            </div>
-
-                            <div className={'flex flex-col items-center justify-center w-full h-full bg-muted'}>
-                                Tasks
-                            </div>
+                            <FoldersComponent />
+                            <TasksComponent />
                         </div>
                     </div>
                 </DashboardLayout>
