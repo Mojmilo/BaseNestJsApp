@@ -8,7 +8,8 @@ import {LoginDataType, RegisterDataType} from "@/types/auth";
 import {redirect} from "next/navigation";
 import {createHash} from "crypto";
 
-export const verifyToken = async (token: string) => {
+export const verifyToken = async () => {
+    const token = cookies().get('user-token')?.value as string;
     return await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET as string));
 }
 

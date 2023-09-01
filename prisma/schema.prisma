@@ -11,6 +11,11 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
 model User {
   id         Int          @id @default(autoincrement())
   email      String       @unique
@@ -19,6 +24,7 @@ model User {
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   TeamMember TeamMember[]
+  roles      UserRole[]   @default([USER])
 }
 
 model Team {
@@ -29,7 +35,7 @@ model Team {
   TeamMember TeamMember[]
 }
 
-enum Role {
+enum TeamRole {
   OWNER
   MEMBER
 }
@@ -42,5 +48,5 @@ model TeamMember {
   updatedAt DateTime @updatedAt
   team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role      Role     @default(MEMBER)
+  role      TeamRole @default(MEMBER)
 }
