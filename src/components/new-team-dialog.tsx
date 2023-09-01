@@ -13,7 +13,7 @@ import {Icons} from "@/components/icons";
 import * as React from "react";
 import {useState, useTransition} from "react";
 import {TeamDataType} from "@/types/auth";
-import {createTeam} from "@/lib/user";
+import {createTeam} from "@/lib/teams";
 import {useDashboardContext} from "@/context/dashboard-context";
 import {useRouter} from "next/navigation";
 

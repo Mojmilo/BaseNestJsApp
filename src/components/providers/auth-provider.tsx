@@ -3,12 +3,11 @@
 import {User} from "@prisma/client";
 import {useEffect, useState} from "react";
 import {AuthContext} from "@/context/auth-context";
-import {getUser} from "@/lib/user";
-import {AuthenticatedLayoutDataType} from "@/types";
+import {AuthDataType} from "@/types";
 
 type AuthProviderProps = {
     children: React.ReactNode;
-    data: AuthenticatedLayoutDataType;
+    data: AuthDataType;
 }
 
 export const AuthProvider = ({children, data}: AuthProviderProps) => {

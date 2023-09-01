@@ -1,5 +1,5 @@
 import {ConnectAccount} from "@/components/connect-account";
-import GuestLayout from "@/components/layouts/guest-layout";
+import GuestLayout from "@/components/layouts/auth/guest-layout";
 
 export default function Login() {
     return (

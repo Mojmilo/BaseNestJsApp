@@ -16,6 +16,25 @@ export const getTeams = async () => {
     });
 }
 
+export const createTeam = async (name: string) => {
+    // verify if name is not empty
+    if (!name) {
+        throw new Error('Missing name');
+    }
+
+    return prisma.team.create({
+        data: {
+            name: name,
+            TeamMember: {
+                create: {
+                    role: 'OWNER',
+                    userId: getUserId()
+                }
+            }
+        }
+    });
+}
+
 export const getTeam = async (id: number) => {
     return prisma.team.findUnique({
         where: {

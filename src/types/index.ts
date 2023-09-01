@@ -1,6 +1,6 @@
 import {Team, User} from "@prisma/client";
 
-export type AuthenticatedLayoutDataType = {
+export type AuthDataType = {
     user: User | null;
 }
 

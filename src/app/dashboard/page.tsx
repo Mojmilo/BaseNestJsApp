@@ -1,5 +1,5 @@
 import DashboardLayout from "@/components/layouts/dashboard-layout";
-import AuthenticatedLayout from "@/components/layouts/authenticated-layout";
+import AuthenticatedLayout from "@/components/layouts/auth/authenticated-layout";
 
 
 export default function Dashboard() {

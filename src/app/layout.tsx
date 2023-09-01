@@ -2,10 +2,6 @@ import '../styles/globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import {ThemeProvider} from "@/components/providers/theme-provider";
-import {AuthProvider} from "@/components/providers/auth-provider";
-import {AuthenticatedLayoutDataType} from "@/types";
-import {getUser} from "@/lib/user";
-import {verifyToken} from "@/lib/auth";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,18 +15,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-
-    const data: AuthenticatedLayoutDataType = {
-        user: await getUser()
-    };
-
     return (
         <html lang="en">
             <body className={inter.className}>
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                    <AuthProvider data={data}>
-                        {children}
-                    </AuthProvider>
+                    {children}
                 </ThemeProvider>
             </body>
         </html>

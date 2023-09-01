@@ -1,5 +1,5 @@
 import {CreateAccount} from "@/components/create-account";
-import GuestLayout from "@/components/layouts/guest-layout";
+import GuestLayout from "@/components/layouts/auth/guest-layout";
 
 export default function Register() {
     return (
